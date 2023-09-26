@@ -39,17 +39,6 @@ Os requisitos funcionais do sistema estão listados de acordo com sua determinad
 * <b> [RNF003] Disponibilidade </b>: O SGAB deve estar sempre disponível para utilização, mesmo em cenários que a internet estiver instável.
 * <b> [RNF004] Desempenho </b>: Deve ser rápido, com tempo de inicialização inferior a 5 segundos.
 
-## 📑 Documentação do Projeto
-<table>
-  Documento do Projeto: 
-  <a href= "[https://docs.google.com/document/d/1iDARX8hfD6CvpUMOUtUOb-ttJYDn8J8OdbGw0ZdQWqE/edit?usp=sharing](https://docs.google.com/document/d/1kdDblvmi7dmG6vF3aN_CnaX_LOFo_KMLTeZHEi5xCPU/edit)">
-    Sistema de Gerenciamento de Acervo Bibliotecário (SGAB)
-  </a>
-</table>
-
-## Diagrama de Classes
-![Diagrama de Classes](https://raw.githubusercontent.com/CaraChaato/SGAB/main/Arquivos/Diagrama%20de%20Classes%20UML%20-%20Sistema%20de%20Biblioteca%20-%20Fundo%20Transparente.png)
-
 ## :handshake: Colaboradores
 <table align="center">
   <tr>
