@@ -67,5 +67,16 @@ Os requisitos funcionais do sistema estão listados de acordo com sua determinad
         </sub>
       </a>
     </td>
+     <tr>
+    <td align="center">
+      <a href="https://github.com/samirafq">
+        <img src="https://avatars.githubusercontent.com/u/111064435?s=4" 
+        width="100px;" alt="Foto de Samira Franca no GitHub"/><br>
+        <sub>
+          <b>Samira Franca</b>
+        </sub>
+      </a>
+    </td>
+     </tr>
   </tr>
 </table> 
