@@ -58,5 +58,14 @@ Os requisitos funcionais do sistema estão listados de acordo com sua determinad
         </sub>
       </a>
     </td>
+    <td align="center">
+      <a href="https://github.com/franciscalorraynes">
+        <img src="https://avatars.githubusercontent.com/u/104534319?=4" 
+        width="100px;" alt="Foto de Francisca Lorrayne no GitHub"/><br>
+        <sub>
+          <b>Francisca Lorrayne</b>
+        </sub>
+      </a>
+    </td>
   </tr>
 </table> 
