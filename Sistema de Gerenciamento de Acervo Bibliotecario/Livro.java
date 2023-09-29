@@ -28,6 +28,19 @@ public class Livro {
         this.livroDisponivel = livroDisponivel;
     }
 
+    public Livro(String titulo, String genero, String autor, String dataDaPublicacao, String edicao,
+            String editora, String isbn, boolean livroAcervo, boolean livroDisponivel) {
+        this.titulo = titulo;
+        this.genero = genero;
+        this.autor = autor;
+        this.dataDaPublicacao = dataDaPublicacao;
+        this.edicao = edicao;
+        this.editora = editora;
+        this.isbn = isbn;
+        this.livroAcervo = livroAcervo;
+        this.livroDisponivel = livroDisponivel;
+    }
+
     //Milhares de getters and setters
 
     public int getIdLivro() {
