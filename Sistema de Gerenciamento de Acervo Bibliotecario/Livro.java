@@ -151,7 +151,7 @@ public class Livro {
             case 1:
                 tipo = "titulo";
                 System.out.print("Titulo: ");
-                busca = sc.nextLine(); //recebendo o que queremos buscar
+                busca = sc.nextLine();//recebendo o que queremos buscar
                 break;
             case 2:
                 tipo = "autor";
@@ -170,11 +170,12 @@ public class Livro {
 
         try (Connection connection = PostgreSQLConnection.getInstance().getConnection()) {
 
-            String query = "Select * from livro where "+ tipo +" = ?"; // Busca no banco de dados, neste caso, já que o ? é substituido por
+            String query = "Select * from livro where "+ tipo +" like ? "; // Busca no banco de dados, neste caso, já que o ? é substituido por
             PreparedStatement state = connection.prepareStatement(query); // 'algo', usamos a varivavel diretamente para a pesquisa ficar correta
-            state.setString(1, busca);
-            ResultSet result = state.executeQuery();//Resultados da execução da query.
-
+            state.setString(1, "%" + busca + "%");
+            ResultSet result = state.executeQuery();// Resultados da execução da query.
+            
+            // Enquanto houverem linhas de resultados da busca para serem impressas, retorna-os.
             while (result.next()) { 
                 return new Livro(result.getInt(1), result.getString(2), result.getString(3), result.getString(4), result.getString(5), result.getString(6), result.getString(7), result.getString(8), result.getBoolean(9), result.getBoolean(10));
             }
