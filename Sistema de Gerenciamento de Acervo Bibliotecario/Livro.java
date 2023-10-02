@@ -192,6 +192,17 @@ public class Livro {
         }
     }
     
+    public static void excluirLivro(int idLivro) {
+        try (Connection connection = PostgreSQLConnection.getInstance().getConnection()) {
+            String query = "Delete From livro where idLivro = ?"; 
+            PreparedStatement state = connection.prepareStatement(query); 
+            state.setInt(1, idLivro);
+            state.executeQuery(); 
+        } catch (Exception e) {//se der erro, mostre qual foi
+            System.out.println(e);
+        }
+    }
+    
     @Override
     public String toString() {
         return "Livro [idLivro=" + idLivro + ", titulo=" + titulo + ", genero=" + genero + ", autor=" + autor
