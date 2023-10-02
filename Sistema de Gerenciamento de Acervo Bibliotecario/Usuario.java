@@ -1,18 +1,50 @@
+import java.sql.*;
+import java.util.ArrayList;;
+
 public class Usuario {
+    private String cpf;
     private String nome;
-    private int cpf;
-    private String telefone;
     private String senha;
     private String email;
-    private String endereco;
+    private ArrayList<Date> telefone;
 
-    public Usuario(String nome, int cpf, String telefone, String senha, String email, String endereco) {
-        this.nome = nome;
+    public Usuario(){}
+    public Usuario(String cpf, String nome, String senha, String email) {
         this.cpf = cpf;
-        this.telefone = telefone;
+        this.nome = nome;
         this.senha = senha;
         this.email = email;
-        this.endereco = endereco;
+    }
+
+    /**
+     * Um metodo que insere uma instância de usuario no banco de dados
+     */
+    public void insereUsuario(){
+        try(Connection connection = PostgreSQLConnection.getInstance().getConnection()){
+        String query = "INSERT into usuario (cpf, nome, senha, email) VALLUES (?, ?, ?, ?)";
+        PreparedStatement state = connection.prepareStatement(query);
+        state.setString(1, cpf);
+        state.setString(2, nome);
+        state.setString(3, senha);
+        state.setString(4, email);
+        state.executeUpdate();
+        }catch (Exception e){
+            System.out.println (e);
+        }
+    }
+
+    public static buscaUsuario(String cpf){
+        try (Connection connection = PostgreSQLConnection.getInstance().getConnection()){
+            String query = "Select * "
+        }
+    }
+    
+    public String getCpf() {
+        return cpf;
+    }
+
+    public void setCpf(String cpf) {
+        this.cpf = cpf;
     }
 
     public String getNome() {
@@ -21,22 +53,6 @@ public class Usuario {
 
     public void setNome(String nome) {
         this.nome = nome;
-    }
-    //
-    public int getCpf() {
-        return cpf;
-    }
-
-    public void setCpf(int cpf) {
-        this.cpf = cpf;
-    }
-
-    public String getTelefone() {
-        return telefone;
-    }
-
-    public void setTelefone(String telefone) {
-        this.telefone = telefone;
     }
 
     public String getSenha() {
@@ -55,18 +71,9 @@ public class Usuario {
         this.email = email;
     }
 
-    public String getEndereco() {
-        return endereco;
-    }
-
-    public void setEndereco(String endereco) {
-        this.endereco = endereco;
-    }
-
     @Override
     public String toString() {
-        return "Usuario [nome=" + nome + ", cpf=" + cpf + ", telefone=" + telefone + ", senha=" + senha + ", email="
-                + email + ", endereco=" + endereco + "]";
+        return "Usuario [cpf=" + cpf + ", nome=" + nome + ", senha=" + senha + ", email=" + email + "]";
     }
 
 }
