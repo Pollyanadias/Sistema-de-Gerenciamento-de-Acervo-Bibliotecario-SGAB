@@ -6,7 +6,7 @@ public class Livro {
     private String titulo;
     private String genero;
     private String autor;
-    private String dataDaPublicacao;
+    private Date dataDaPublicacao;
     private String edicao;
     private String editora;
     private String isbn;
@@ -14,22 +14,9 @@ public class Livro {
     private boolean livroDisponivel;
 
 
-    public Livro(int idLivro, String titulo, String genero, String autor, String dataDaPublicacao, String edicao,
+    public Livro(int idLivro, String titulo, String genero, String autor, Date dataDaPublicacao, String edicao,
             String editora, String isbn, boolean livroAcervo, boolean livroDisponivel) {
         this.idLivro = idLivro;
-        this.titulo = titulo;
-        this.genero = genero;
-        this.autor = autor;
-        this.dataDaPublicacao = dataDaPublicacao;
-        this.edicao = edicao;
-        this.editora = editora;
-        this.isbn = isbn;
-        this.livroAcervo = livroAcervo;
-        this.livroDisponivel = livroDisponivel;
-    }
-
-    public Livro(String titulo, String genero, String autor, String dataDaPublicacao, String edicao,
-            String editora, String isbn, boolean livroAcervo, boolean livroDisponivel) {
         this.titulo = titulo;
         this.genero = genero;
         this.autor = autor;
@@ -75,11 +62,11 @@ public class Livro {
         this.autor = autor;
     }
 
-    public String getDataDaPublicacao() {
+    public Date getDataDaPublicacao() {
         return dataDaPublicacao;
     }
 
-    public void setDataDaPublicacao(String dataDaPuplicacao) {
+    public void setDataDaPublicacao(Date dataDaPuplicacao) {
         this.dataDaPublicacao = dataDaPuplicacao;
     }
 
@@ -133,7 +120,7 @@ public class Livro {
             ResultSet result = state.executeQuery(); //recebe a tabela com as respostas da pesquisa
             while (result.next()) {// enquanto houverem respostas, imprima-as
                 return new Livro(result.getInt(1), result.getString(2), result.getString(3), result.getString(4),
-                        result.getString(5), result.getString(6), result.getString(7), result.getString(8),
+                        result.getDate(5), result.getString(6), result.getString(7), result.getString(8),
                         result.getBoolean(9), result.getBoolean(10));
             }
         } catch (Exception e) {//se der erro, mostre qual foi
@@ -177,7 +164,7 @@ public class Livro {
             
             // Enquanto houverem linhas de resultados da busca para serem impressas, retorna-os.
             while (result.next()) { 
-                return new Livro(result.getInt(1), result.getString(2), result.getString(3), result.getString(4), result.getString(5), result.getString(6), result.getString(7), result.getString(8), result.getBoolean(9), result.getBoolean(10));
+                return new Livro(result.getInt(1), result.getString(2), result.getString(3), result.getString(4), result.getDate(5), result.getString(6), result.getString(7), result.getString(8), result.getBoolean(9), result.getBoolean(10));
             }
         } catch (Exception e) {
             System.out.println(e);
