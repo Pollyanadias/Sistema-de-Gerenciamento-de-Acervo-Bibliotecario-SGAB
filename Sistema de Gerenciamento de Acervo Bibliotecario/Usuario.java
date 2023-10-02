@@ -33,9 +33,36 @@ public class Usuario {
         }
     }
 
-    public static buscaUsuario(String cpf){
+    /*
+     * ele recebe um usuario e retorna uma instacia dele
+     */
+    public static Usuario buscaUsuarioId(String cpf){
         try (Connection connection = PostgreSQLConnection.getInstance().getConnection()){
-            String query = "Select * "
+            String query = "Select * From usuario where cpf = ?";
+            PreparedStatement state = connection.prepareStatement(query);
+            state.setString(1, cpf);
+            ResultSet result = state.executeQuery();
+
+            while (result.next()){
+                return new Usuario(result.getString(1), result.getString(2), result.getString(3), result.getString(4));
+            }
+        }catch (Exception e){
+            System.out.println (e);
+        }
+        return null;
+    }
+
+    /*
+     * vai remover um usuario do banco de dados com base em seu cpf
+     */
+    public static void removeUsuario(String cpf){
+        try (Connection connection = PostgreSQLConnection.getInstance().getConnection()){
+            String query = "DELETE From usuario where cpf = ?";
+            PreparedStatement state = connection.prepareStatement(query);
+            state.setString(1, cpf);
+            state.executeQuery();
+        }catch(Exception e){
+            System.out.println (e);
         }
     }
     
