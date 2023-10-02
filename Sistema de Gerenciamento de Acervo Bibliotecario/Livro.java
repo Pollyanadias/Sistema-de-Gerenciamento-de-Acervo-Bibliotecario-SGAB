@@ -6,7 +6,7 @@ public class Livro {
     private String titulo;
     private String genero;
     private String autor;
-    private Date dataDaPublicacao;
+    private Date dataPublicacao;
     private String edicao;
     private String editora;
     private String isbn;
@@ -14,13 +14,13 @@ public class Livro {
     private boolean livroDisponivel;
 
 
-    public Livro(int idLivro, String titulo, String genero, String autor, Date dataDaPublicacao, String edicao,
+    public Livro(int idLivro, String titulo, String genero, String autor, Date dataPublicacao, String edicao,
             String editora, String isbn, boolean livroAcervo, boolean livroDisponivel) {
         this.idLivro = idLivro;
         this.titulo = titulo;
         this.genero = genero;
         this.autor = autor;
-        this.dataDaPublicacao = dataDaPublicacao;
+        this.dataPublicacao = dataPublicacao;
         this.edicao = edicao;
         this.editora = editora;
         this.isbn = isbn;
@@ -62,12 +62,12 @@ public class Livro {
         this.autor = autor;
     }
 
-    public Date getDataDaPublicacao() {
-        return dataDaPublicacao;
+    public Date getDataPublicacao() {
+        return dataPublicacao;
     }
 
-    public void setDataDaPublicacao(Date dataDaPuplicacao) {
-        this.dataDaPublicacao = dataDaPuplicacao;
+    public void setDataPublicacao(Date dataDaPuplicacao) {
+        this.dataPublicacao = dataDaPuplicacao;
     }
 
     public String getEditora() {
@@ -172,10 +172,30 @@ public class Livro {
         return null;
     }
 
+    public void inserirLivro() {
+        try (Connection connection = PostgreSQLConnection.getInstance().getConnection()) {
+            String query = "INSERT INTO Livro (titulo, genero, autor, dataPublicacao, edicao, editora, isbn, livroAcervo, livroDisponivel) VALUES  (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            PreparedStatement state = connection.prepareStatement(query);
+            state.setString(1, titulo);
+            state.setString(2, genero);
+            state.setString(3, autor);
+            state.setDate(4, dataPublicacao);
+            state.setString(5, edicao);
+            state.setString(6, editora);
+            state.setString(7, isbn);
+            state.setBoolean(8, livroAcervo);
+            state.setBoolean(9, livroDisponivel);
+            state.executeUpdate();
+
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+    }
+    
     @Override
     public String toString() {
         return "Livro [idLivro=" + idLivro + ", titulo=" + titulo + ", genero=" + genero + ", autor=" + autor
-                + ", dataDaPublicacao=" + dataDaPublicacao + ", edicao=" + edicao + ", editora=" + editora + ", isbn="
+                + ", dataPublicacao=" + dataPublicacao + ", edicao=" + edicao + ", editora=" + editora + ", isbn="
                 + isbn + ", livroAcervo=" + livroAcervo + ", livroDisponivel=" + livroDisponivel + "]";
     }
 
