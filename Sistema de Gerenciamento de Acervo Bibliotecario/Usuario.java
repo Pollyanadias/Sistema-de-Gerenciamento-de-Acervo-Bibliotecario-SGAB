@@ -6,7 +6,7 @@ public class Usuario {
     private String nome;
     private String senha;
     private String email;
-    private ArrayList<Date> telefone;
+    private String[] telefone = new String[2];
 
     public Usuario(){}
     public Usuario(String cpf, String nome, String senha, String email) {
@@ -36,7 +36,7 @@ public class Usuario {
     /*
      * ele recebe um usuario e retorna uma instacia dele
      */
-    public static Usuario buscaUsuarioId(String cpf){
+    public static Usuario buscaUsuario(String cpf){
         try (Connection connection = PostgreSQLConnection.getInstance().getConnection()){
             String query = "Select * From usuario where cpf = ?";
             PreparedStatement state = connection.prepareStatement(query);
