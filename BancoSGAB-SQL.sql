@@ -6,6 +6,7 @@ CREATE TABLE Usuario (
 );
 
 CREATE TABLE Telefone (
+    idTelefone Serial PRIMARY KEY,
     cpf VARCHAR(11),
     Numero VARCHAR(11) NOT NULL,
     FOREIGN KEY (cpf) REFERENCES Usuario(cpf)
@@ -23,6 +24,27 @@ CREATE TABLE Cliente (
     FOREIGN KEY (cpf) REFERENCES Usuario(cpf)
 );
 
+CREATE TABLE LivroEmprestado(
+    idEmprestado Serial PRIMARY KEY,
+    idLivro int NOT NULL,
+    FOREIGN KEY(idLivro) REFERENCES Livro(idLivro)
+);
+
+CREATE TABLE DataEmprestimo(
+    idDataEmprestimo Serial PRIMARY KEY,
+    DataEmp Date NOT NULL
+);
+
+CREATE TABLE DataPrevista(
+    idDataPrevista Serial PRIMARY KEY,
+    DataPre Date NOT NULL
+);
+
+CREATE TABLE DataDevolucao(
+    idDataDevolucao Serial PRIMARY KEY,
+    DataDev Date NOT NULL
+);
+
 CREATE TABLE Livro (
     idlivro Serial PRIMARY KEY,
     Titulo VARCHAR(50) NOT NULL,
@@ -32,16 +54,18 @@ CREATE TABLE Livro (
     Edicao VARCHAR(50) NOT NULL,
     Editora VARCHAR(50) NOT NULL,
     ISBN VARCHAR(13) NOT NULL, 
-    LivroAcervo Bool NOT NULL,
-    LivroDisponivel Bool NOT NULL
+    quantLivros int NOT NULL,
+    quantDisponivel int NOT NULL
 );
 
 CREATE TABLE Emprestimo (
-    cpf VARCHAR(11),
-    idlivro Serial,
-    DataEmprestimo Date NOT NULL,
-    DataPrevita Date NOT NULL,
-    DataDevolucao Date NOT NULL,
-    FOREIGN KEY (cpf) REFERENCES Usuario(cpf),
-    FOREIGN KEY (idlivro) REFERENCES Livro(idlivro)
+    cpf VARCHAR(11) NOT NULL,
+    idEmprestado int NOT NULL,
+    idDataEmprestimo int NOT NULL,
+    idDataPrevista int NOT NULL,
+    idDataDevolucao int NOT NULL,
+    FOREIGN KEY(idEmprestado) REFERENCES LivroEmprestado(idEmprestado),
+    FOREIGN KEY(idDataEmprestimo) REFERENCES DataEmprestimo(idDataEmprestimo),
+    FOREIGN KEY(idDataPrevista) REFERENCES DataPrevista(idDataPrevista),
+    FOREIGN KEY(idDataDevolucao) REFERENCES DataDevolucao(idDataDevolucao)
 )
