@@ -117,8 +117,22 @@ public class Usuario {
         return null;
     }
 
+    public static Usuario confirmaCredencial(String email, String senha ){
+        try (Connection connection = PostgreSQLConnection.getInstance().getConnection()){
+            String query = "SELECT cpf From usuario where email = ? AND senha = ?";
+            PreparedStatement state = connection.prepareStatement(query);
+            state.setString(1, email);
+            state.setString(2, senha);
+            ResultSet result = state.executeQuery();
+            return buscaUsuario(result.getString(1));
+        } catch (Exception e) {
+            System.out.println (e);
+        }
 
-    //
+        return null;
+
+    }
+    
     public void editarUsuario(String cpf, String nome, String senha, String email, String telefone1, String telefone2, String telefone3 ){
         try (Connection connection = PostgreSQLConnection.getInstance().getConnection()){
             String query = "UPDATE Usuario SET nome = ?, senha = ?, email = ? WHERE cpf = ?";
