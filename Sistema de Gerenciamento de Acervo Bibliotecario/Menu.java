@@ -101,8 +101,8 @@ public class Menu {
                         sc.nextLine();
                         break;
                 }
-                Usuario usuario = new Usuario(cpf, nome, senha, email, telefone);
-                usuario.insereUsuario();
+                Usuario usuario = new Usuario(cpf, nome, senha, email, null);
+                usuario.criarConta();
                 sc.nextLine();
                 break;
             case 2:
@@ -230,8 +230,8 @@ public class Menu {
                 int quantLivros = sc.nextInt();
                 System.out.println("quantDisponivel: ");
                 int quantDisponivel = sc.nextInt();
-                Livro livroAux = new Livro(titulo, genero, autor, dataPublicacao, edicao, editora, isbn, quantLivros,
-                        quantDisponivel);
+                Livro livroAux = new Livro(quantLivros, titulo, genero, autor, null, edicao, editora, isbn, false, false);
+                      
                 livroAux.inserirLivro();
                 System.out.println(livroAux);
                 sc.nextLine();

@@ -1,5 +1,6 @@
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.util.ArrayList;
 
 public class Cliente extends Usuario {
     private int idCliente;
@@ -8,13 +9,17 @@ public class Cliente extends Usuario {
         this.idCliente = idCliente;
     }
 
-    public Cliente(String cpf, String nome, String senha, String email, int idCliente) {
-        super(cpf, nome, senha, email);
+    
+
+    public Cliente(String cpf, String nome, String senha, String email, ArrayList<String> telefone, int idCliente) {
+        super(cpf, nome, senha, email, telefone);
         this.idCliente = idCliente;
     }
 
+
+
     public void insereCliente(Usuario usuario){
-        usuario.insereUsuario();
+        usuario.criarConta();
         try (Connection connection = PostgreSQLConnection.getInstance().getConnection()){
             String query = "INSERT INTO Cliente";
             PreparedStatement state = connection.prepareStatement(query);
