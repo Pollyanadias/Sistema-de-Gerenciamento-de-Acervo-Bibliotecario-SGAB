@@ -3,20 +3,12 @@ import java.sql.PreparedStatement;
 import java.util.ArrayList;
 
 public class Cliente extends Usuario {
-    private int idCliente;
-
-    public Cliente(int idCliente){
-        this.idCliente = idCliente;
-    }
-
-    
+    private int idCliente;    
 
     public Cliente(String cpf, String nome, String senha, String email, ArrayList<String> telefone, int idCliente) {
         super(cpf, nome, senha, email, telefone);
         this.idCliente = idCliente;
     }
-
-
 
     public void insereCliente(Usuario usuario){
         usuario.criarConta();
