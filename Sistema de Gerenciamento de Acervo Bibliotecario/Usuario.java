@@ -8,7 +8,7 @@ public class Usuario {
     private String email;
     private ArrayList<String> telefone;
 
-    public Usuario(String cpf, String nome, String senha, String email, ArrayList<String> telefone) {
+    public Usuario(String cpf, String nome, String senha, String email) {
         setCpf(cpf);
         setNome(nome);
         setSenha(senha);

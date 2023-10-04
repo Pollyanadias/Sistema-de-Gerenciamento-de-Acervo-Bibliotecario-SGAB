@@ -1,21 +1,21 @@
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
 
-public class Adm extends Usuario {
+    public class Adm extends Usuario {
     private int idAdm;
-
-   
 
     public Adm(int idAdm, Usuario usuario) {
         super(usuario.getCpf(),usuario.getNome(), usuario.getSenha(), usuario.getEmail());
         this.idAdm = idAdm;
     }
 
-    public Adm(String cpf, String nome, String senha, String email, int idAdm) {
+    public Adm(String cpf, String nome, String senha, String email, ArrayList<String> telefone, int idAdm) {
         super(cpf, nome, senha, email);
         this.idAdm = idAdm;
     }
+
 
     public int getIdAdm() {
         return idAdm;
@@ -54,14 +54,14 @@ public class Adm extends Usuario {
         }
         return adm;
     }
-
+   
     public static void ExcluirAdm(String cpf){
         try(Connection connection = PostgreSQLConnection.getInstance().getConnection() ) {
         String query = "Delete From Adm where cpf = ?";
         PreparedStatement state = connection.prepareStatement(query);
         state.setString(1, cpf);
         state.executeUpdate();
-        Usuario.removeUsuario(cpf);
+        Usuario.excluirConta(cpf);
         } catch (Exception e) {
             System.out.print(e);
             
