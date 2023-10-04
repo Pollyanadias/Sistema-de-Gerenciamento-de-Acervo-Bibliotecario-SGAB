@@ -36,7 +36,7 @@ public class Usuario {
     /*
      * ele recebe um usuario e retorna uma instacia dele
      */
-    public static Usuario buscaUsuarioId(String cpf){
+    public static Usuario buscaUsuario(String cpf){
         try (Connection connection = PostgreSQLConnection.getInstance().getConnection()){
             String query = "Select * From usuario where cpf = ?";
             PreparedStatement state = connection.prepareStatement(query);

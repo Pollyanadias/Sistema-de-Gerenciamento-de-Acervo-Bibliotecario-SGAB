@@ -1,8 +1,15 @@
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+
 public class Adm extends Usuario {
     private int idAdm;
 
-    public Adm(int idAdm){
-        this.idAdm =idAdm;
+   
+
+    public Adm(int idAdm, Usuario usuario) {
+        super(usuario.getCpf(),usuario.getNome(), usuario.getSenha(), usuario.getEmail());
+        this.idAdm = idAdm;
     }
 
     public Adm(String cpf, String nome, String senha, String email, int idAdm) {
@@ -17,6 +24,49 @@ public class Adm extends Usuario {
     public void setIdAdm(int idAdm) {
         this.idAdm = idAdm;
     }
+
+    public void InserirAdm(String cpf){    
+        try(Connection connection = PostgreSQLConnection.getInstance().getConnection()){
+        String query = "INSERT INTO Adm (cpf) VALUES (?)";
+        PreparedStatement state = connection.prepareStatement(query);
+        state.setString(1, cpf);
+        state.executeUpdate();  
+
+    }
+    catch(Exception e){
+        System.out.println(e);
+    
+        }
+     }
+
+    public static Adm BuscarAdm(int id){
+        Adm adm = null;
+        try(Connection connection = PostgreSQLConnection.getInstance().getConnection()) {
+        String query = "SELECT from Adm where id = ?";
+        PreparedStatement state = connection.prepareStatement(query);
+        state.setInt(1, id);
+        ResultSet result = state.executeQuery();  
+        while (result.next()) {
+            return new Adm(result.getInt(1), Usuario.buscaUsuario(result.getString(2)));
+        }
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        return adm;
+    }
+
+    public static void ExcluirAdm(String cpf){
+        try(Connection connection = PostgreSQLConnection.getInstance().getConnection() ) {
+        String query = "Delete From Adm where cpf = ?";
+        PreparedStatement state = connection.prepareStatement(query);
+        state.setString(1, cpf);
+        state.executeUpdate();
+        Usuario.removeUsuario(cpf);
+        } catch (Exception e) {
+            System.out.print(e);
+            
+        }
+     }
 
     @Override
     public String toString() {
