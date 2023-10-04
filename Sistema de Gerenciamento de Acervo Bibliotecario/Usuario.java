@@ -6,7 +6,7 @@ public class Usuario {
     private String nome;
     private String senha;
     private String email;
-    private ArrayList<Date> telefone;
+    private String[] telefone = new String[2];
 
     public Usuario(){}
     public Usuario(String cpf, String nome, String senha, String email) {
