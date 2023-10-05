@@ -6,7 +6,7 @@ public class Cliente extends Usuario {
     private int idCliente;    
 
     public Cliente(String cpf, String nome, String senha, String email, ArrayList<String> telefone, int idCliente) {
-        super(cpf, nome, senha, email, telefone);
+        super(cpf, nome, senha, email);
         this.idCliente = idCliente;
     }
 
@@ -44,7 +44,7 @@ public class Cliente extends Usuario {
             PreparedStatement state = connection.prepareStatement(query);
             state.setString(1, cpf);
             state.executeQuery();
-            Usuario.removeUsuario(cpf);
+            Usuario.excluirConta(cpf);
         } catch (Exception e) {
             System.out.println(e); 
         }
