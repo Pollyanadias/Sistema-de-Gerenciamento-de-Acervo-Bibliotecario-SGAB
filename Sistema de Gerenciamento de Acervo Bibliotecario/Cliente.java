@@ -6,7 +6,7 @@ public class Cliente extends Usuario {
     private int idCliente;    
 
     public Cliente(String cpf, String nome, String senha, String email, ArrayList<String> telefone, int idCliente) {
-        super(cpf, nome, senha, email, telefone);
+        super(cpf, nome, senha, email);
         this.idCliente = idCliente;
     }
 
