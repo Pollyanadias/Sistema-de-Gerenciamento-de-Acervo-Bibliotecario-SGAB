@@ -16,7 +16,6 @@ import java.util.ArrayList;
         this.idAdm = idAdm;
     }
 
-
     public int getIdAdm() {
         return idAdm;
     }
@@ -27,7 +26,7 @@ import java.util.ArrayList;
 
     public void InserirAdm(String cpf){    
         try(Connection connection = PostgreSQLConnection.getInstance().getConnection()){
-        String query = "INSERT INTO Adm (cpf) VALUES (?)";
+        String query = "INSERT INTO Adm (cpf) VALUES (?)"; //inserir o cpf dentro da tabela cpf
         PreparedStatement state = connection.prepareStatement(query);
         state.setString(1, cpf);
         state.executeUpdate();  
@@ -42,7 +41,7 @@ import java.util.ArrayList;
     public static Adm BuscarAdm(int id){
         Adm adm = null;
         try(Connection connection = PostgreSQLConnection.getInstance().getConnection()) {
-        String query = "SELECT from Adm where id = ?";
+        String query = "SELECT * FROM Adm where id = ?";
         PreparedStatement state = connection.prepareStatement(query);
         state.setInt(1, id);
         ResultSet result = state.executeQuery();  
@@ -57,14 +56,13 @@ import java.util.ArrayList;
    
     public static void ExcluirAdm(String cpf){
         try(Connection connection = PostgreSQLConnection.getInstance().getConnection() ) {
-        String query = "Delete From Adm where cpf = ?";
+        String query = "DELETE * FROM Adm WHERE cpf = ?"; //Vai deletar todos os dados do ADM que possue o CPF correpondente à o requisitado
         PreparedStatement state = connection.prepareStatement(query);
-        state.setString(1, cpf);
+        state.setString(1, cpf); //substituindo o ? da String query, o 1 é a posição e o valor cpf é ?
         state.executeUpdate();
-        Usuario.excluirConta(cpf);
+        Usuario.excluirConta(cpf); 
         } catch (Exception e) {
-            System.out.print(e);
-            
+            e.printStackTrace(); //mostrar o erro onde ele está
         }
      }
 
