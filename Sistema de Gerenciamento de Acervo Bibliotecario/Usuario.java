@@ -140,6 +140,34 @@ public class Usuario {
 
         return null;
     }
+
+    public void editarUsuario(String nome, String senha, String email) {
+        Connection connection = PostgreSQLConnection.getInstance().getConnection();
+        PreparedStatement state = null;
+
+        // Primeiro checa se algum desses dados foi recebido e aplica valores aos que
+        // forem null.
+        setNome(nome != null ? nome : getNome());
+        setSenha(senha != null ? senha : getSenha());
+        setEmail(email != null ? email : getEmail());
+
+        try {
+
+            // Atualiza nome, senha e email na tabela usuario na posição do cpf usado.
+            String query = "UPDATE Usuario SET nome = ?, senha = ?, email = ? WHERE cpf = ?";
+            state = connection.prepareStatement(query);
+            state.setString(1, this.nome);
+            state.setString(2, this.senha);
+            state.setString(3, this.email);
+            state.setString(4, this.cpf);
+            state.executeUpdate();
+            state.close();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
      /**
      * buscaTelefone é um método auxiliar. Busca um telefone no banco com base no
      * seu cpf, e retorna um
