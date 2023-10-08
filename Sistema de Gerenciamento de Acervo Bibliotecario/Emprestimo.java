@@ -2,6 +2,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Date;
@@ -108,7 +109,7 @@ public class Emprestimo {
         try (Connection connection = PostgreSQLConnection.getInstance().getConnection()) {
             String query = "UPDATE emprestimo SET dataDevolucao = ? WHERE idLivro = ?"; 
             PreparedStatement state = connection.prepareStatement(query); 
-            state.setDate(1, Date.valueOf(LocalDate.now()));
+            state.setDate(1, java.sql.Date.valueOf(LocalDate.now()));
             state.setInt(2, idLivro);
             state.executeQuery(); 
         } catch (Exception e) {//se der erro, mostre qual foi
