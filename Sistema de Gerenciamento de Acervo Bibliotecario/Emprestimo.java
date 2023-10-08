@@ -106,9 +106,10 @@ public class Emprestimo {
 
     public static void devolverLivro(int idLivro) {
         try (Connection connection = PostgreSQLConnection.getInstance().getConnection()) {
-            String query = "Delete From emprestimo where idLivro = ?"; 
+            String query = "UPDATE emprestimo SET dataDevolucao = ? WHERE idLivro = ?"; 
             PreparedStatement state = connection.prepareStatement(query); 
-            state.setInt(1, idLivro);
+            state.setDate(1, Date.valueOf(LocalDate.now()));
+            state.setInt(2, idLivro);
             state.executeQuery(); 
         } catch (Exception e) {//se der erro, mostre qual foi
             System.out.println(e);
