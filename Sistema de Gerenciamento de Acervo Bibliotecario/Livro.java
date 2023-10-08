@@ -313,6 +313,40 @@ public class Livro {
             System.out.println(e);
         }
     }
+
+    public static List<Livro> ListarAcervo() {
+        List<Livro> acervo= new ArrayList<Livro>();
+        Connection connection = PostgreSQLConnection.getInstance().getConnection();
+        PreparedStatement state = null;
+        ResultSet result = null;
+    
+        try  {
+            String query = "SELECT * FROM livro";
+            state = connection.prepareStatement(query);
+            result = state.executeQuery();
+            
+            // Aí arruma esse while
+            while (result.next()) {
+                Livro livro = new Livro(
+                    result.getInt(1),
+                    result.getString(2),
+                    result.getString(3),
+                    result.getString(4),
+                    result.getDate(5),
+                    result.getString(6),
+                    result.getString(7),
+                    result.getString(8),
+                    result.getInt(9),
+                    result.getInt(10)
+                );
+                acervo.add(livro);
+            }
+            return acervo;
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        return null;
+    }
     
     @Override
     public String toString() {
