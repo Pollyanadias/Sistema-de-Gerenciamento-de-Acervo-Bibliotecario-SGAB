@@ -2,7 +2,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class Menu {
+public class MainProjeto {
 
     public static void main(String[] args) throws InterruptedException, IOException {
         Scanner sc = new Scanner(System.in);
