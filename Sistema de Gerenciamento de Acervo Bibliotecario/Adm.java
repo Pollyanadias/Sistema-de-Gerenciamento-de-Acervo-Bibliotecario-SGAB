@@ -3,27 +3,24 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 
-    public class Adm extends Usuario {
+public class Adm extends Usuario {
     private int idAdm;
 
     public Adm(int idAdm, Usuario usuario) {
-        super(usuario.getCpf(),usuario.getNome(), usuario.getSenha(), usuario.getEmail());
+        super(usuario.getCpf(), usuario.getNome(), usuario.getSenha(), usuario.getEmail(), usuario.getTelefone());
         this.idAdm = idAdm;
     }
 
-    public Adm(String cpf, String nome, String senha, String email, ArrayList<String> telefone, int idAdm) {
-        super(cpf, nome, senha, email);
-        this.idAdm = idAdm;
+    public Adm(String cpf, String nome, String senha, String email, ArrayList<String> telefone) {
+        super(cpf, nome, senha, email, telefone);
     }
 
-    public int getIdAdm() {
-        return idAdm;
-    }
-
-    public void setIdAdm(int idAdm) {
-        this.idAdm = idAdm;
-    }
-
+    /**
+     * Método criarAdm: O método recebe as informações de um usuário, e o cadastra
+     * na tabela adm, gerando
+     * um idAdm que será usado para verificação de métodos de emprestimo e dentre
+     * outros.
+     */
     public void criarAdm() {
         Connection connection = PostgreSQLConnection.getInstance().getConnection();
         PreparedStatement state = null;
@@ -59,7 +56,14 @@ import java.util.ArrayList;
 
     }
 
-public static Adm buscaAdm(String cpf) {
+    /**
+     * Método buscaAdm: Responsável por buscar um adm na tabela de acordo com seu
+     * cpf.
+     * 
+     * @param cpf
+     * @return Adm
+     */
+    public static Adm buscaAdm(String cpf) {
         Connection connection = PostgreSQLConnection.getInstance().getConnection();
         PreparedStatement state = null;
         ResultSet result = null;
@@ -81,7 +85,13 @@ public static Adm buscaAdm(String cpf) {
         }
         return null;
     }
-   
+
+    /**
+     * Método excluirAdm: Responsável por remover um adm do sistema bom base em seu
+     * cpf.
+     * 
+     * @param cpf
+     */
     public static void excluirAdm(String cpf) {
         Connection connection = PostgreSQLConnection.getInstance().getConnection();
         PreparedStatement state = null;
@@ -98,32 +108,69 @@ public static Adm buscaAdm(String cpf) {
             e.printStackTrace();
         }
     }
-   
-public void editarAdm(String cpf, String nome, String senha, String email, String telefone1, String telefone2,
-            String telefone3) {
-        try (Connection connection = PostgreSQLConnection.getInstance().getConnection()) {
-            String query = "UPDATE Adm SET nome = ?, senha = ?, email = ? WHERE cpf = ?";
-            PreparedStatement state = connection.prepareStatement(query);
-            state.setString(1, nome);
-            state.setString(2, senha);
-            state.setString(3, email);
-            state.setString(4, cpf);
-            int linhasAfetadas = state.executeUpdate();
 
-            if (linhasAfetadas > 0) {
-                System.out.println("Os dados do Adm foram atualizados com sucesso!");
-            } else {
-                System.out.println("Não foi possivel encontrar um Adm para atualizar!");
+    public static Adm loginAdm(String email, String senha) {
+        Connection connection = PostgreSQLConnection.getInstance().getConnection();
+        PreparedStatement state = null;
+        ResultSet result = null;
+
+        try {
+            Usuario adm = loginUsuario(email, senha);
+            String query = "SELECT idAdm From adm where cpf = ?";
+            state = connection.prepareStatement(query);
+            state.setString(1, adm.getCpf());
+            result = state.executeQuery();
+
+            if (result.next()) {
+                return new Adm(result.getInt(1), adm);
             }
+
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        return null;
     }
 
+    /**
+     * Método listaAdm: Método que lista todos os Administradores do Acervo.
+     * @return ArrayList<Adm>
+     */
+    public static ArrayList<Adm> listaAdm() {
+        Connection connection = PostgreSQLConnection.getInstance().getConnection();
+        PreparedStatement state = null;
+        ResultSet result = null;
+
+        ArrayList<Adm> Admins = new ArrayList<Adm>();
+
+        try {
+
+            String query = "SELECT * From adm";
+            state = connection.prepareStatement(query);
+            result = state.executeQuery();
+
+            while (result.next()) {
+                Adm admin = new Adm(result.getInt(1), buscaUsuario(result.getString(2)));
+                Admins.add(admin);
+            }
+            return Admins;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public int getIdAdm() {
+        return idAdm;
+    }
+
+    public void setIdAdm(int idAdm) {
+        this.idAdm = idAdm;
+    }
 
     @Override
     public String toString() {
-        return "Adm [idAdm=" + idAdm + "]";
+        return "Adm [idAdm=" + idAdm + "]" + super.toString();
     }
-
 }
