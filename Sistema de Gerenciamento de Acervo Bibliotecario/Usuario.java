@@ -132,42 +132,78 @@ public class Usuario {
         return null;
 
     }
-    
-    public void editarUsuario(String cpf, String nome, String senha, String email, String telefone1, String telefone2, String telefone3 ){
-        try (Connection connection = PostgreSQLConnection.getInstance().getConnection()){
-            String query = "UPDATE Usuario SET nome = ?, senha = ?, email = ? WHERE cpf = ?";
-            PreparedStatement state = connection.prepareStatement(query);
-            state.setString(1, nome);
-            state.setString(2, senha);
-            state.setString(3, email);
-            state.setString(4, cpf);
-            int linhasAfetadas = state.executeUpdate();
+     /**
+     * buscaTelefone é um método auxiliar. Busca um telefone no banco com base no
+     * seu cpf, e retorna um
+     * ResultSet contendo o idTelefone e numero em seu primeiro e segundo slot.
+     * 
+     * @param cpf
+     * @return ResultSet
+     */
+    public static ResultSet buscaTelefone(String cpf) {
+        Connection connection = PostgreSQLConnection.getInstance().getConnection();
+        PreparedStatement state = null;
+        ResultSet result = null;
 
-            if(linhasAfetadas > 0){
-                System.out.println ("Os dados do usuário foram atualizados com sucesso!");
-            }else{
-                System.out.println ("Não foi possivel encontrar um usuário para atualizar!");
-            }
+        try {
+
+            // Seleciona idTelefone e numero, ordenados por ordem crescente de id, da tabela
+            // telefone.
+            String query = "SELECT idTelefone, numero FROM telefone WHERE cpf = ? ORDER BY idTelefone";
+            state = connection.prepareStatement(query);
+            state.setString(1, cpf);
+
+            /*
+             * O ResultSet é semelhante a um ArrayList, e o acesso aos dados dele ocorre de
+             * maneira
+             * semelhante a um iterrator.
+             */
+            result = state.executeQuery();
+            return (result);
+
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return null;
     }
 
-    public void editarTelefones(String cpf, String telefone1, String telefone2, String telefone3 ){
-        try (Connection connection = PostgreSQLConnection.getInstance().getConnection()){
-            String query = "UPDATE telefone SET telefone1 = ?, telefone2 = ?, telefone3 = ? WHERE cpf = ?";
-            PreparedStatement state = connection.prepareStatement(query);
-            state.setString(1, telefone1);
-            state.setString(2, telefone2);
-            state.setString(3, telefone3);
-            state.setString(4, cpf);
-            int linhasAfetadas = state.executeUpdate();
+    /**
+     * Método editaTelefone: Responsável por editar o telefone na tabela de uma
+     * instâcia da classe Usuario.
+     * Obs.: Recebe dados já formatados.
+     * 
+     * @param telefone
+     */
+    public void editaTelefone(ArrayList<String> telefone) {
+        Connection connection = PostgreSQLConnection.getInstance().getConnection();
+        ResultSet result = null;
 
-            if(linhasAfetadas > 0){
-                System.out.println ("Os dados do usuário foram atualizados com sucesso!");
-            }else{
-                System.out.println ("Não foi possivel encontrar um usuário para atualizar!");
+        // Esse ArrayList serve pra receber os ids ta tabela telefone, referentes ao cpf
+        // do usuario.
+        ArrayList<Integer> tele = new ArrayList<Integer>();
+
+        // Se estiver vazio, para evitar erros aplico o próprio telefone.
+        setTelefone(telefone != null ? telefone : getTelefone());
+
+        try {
+
+            // Essa busca vai me retornar um ResultSet com idTelefone e numero.
+            result = buscaTelefone(this.cpf);
+            while (result.next()) {
+                // Repare que estou acessando a coluna 1, que contém os ids.
+                tele.add(result.getInt(1));
             }
+
+            // Com base nos ids, faço a atualização do telefone
+            for (int i = 0; i < tele.size(); i++) {
+                String query = "UPDATE Telefone SET numero = ? WHERE idTelefone = ?";
+                PreparedStatement state = connection.prepareStatement(query);
+                state.setString(1, telefone.get(i));
+                state.setInt(2, tele.get(i));
+                state.executeUpdate();
+                state.close();
+            }
+
         } catch (Exception e) {
             e.printStackTrace();
         }
