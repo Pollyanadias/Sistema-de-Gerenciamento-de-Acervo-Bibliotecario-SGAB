@@ -59,23 +59,27 @@ public class Usuario {
      * Obs.: O Método não trata dados, portanto o cpf deve ser recebido no formato correto.
      * @param cpf
      */
-    public static void excluirConta(String cpf){
-        try (Connection connection = PostgreSQLConnection.getInstance().getConnection()){
-            
-            // Remove o usuário da tabela Usuario
-            String query = "DELETE From usuario where cpf = ?"; 
-            PreparedStatement state = connection.prepareStatement(query);
-            state.setString(1, cpf); 
-            state.executeQuery();
+    public static void excluirConta(String cpf) {
+        Connection connection = PostgreSQLConnection.getInstance().getConnection();
+        PreparedStatement state;
+
+        try {
 
             // Remove os telefones endereçados ao usuário removido
-            query = "DELETE From telefone where cpf = ?";
+            String query = "DELETE From telefone where cpf = ?";
             state = connection.prepareStatement(query);
-            state.setString(1, cpf); 
-            state.executeQuery();
+            state.setString(1, cpf);
+            state.executeUpdate();
 
+            // Remove o usuário da tabela Usuario
+            query = "DELETE From usuario where cpf = ?";
+            state = connection.prepareStatement(query);
+            state.setString(1, cpf);
+            state.executeUpdate();
+            state.close();
+            System.out.println("Usuário Excluido!");
         } catch (Exception e) {
-            System.out.println(e);
+            e.printStackTrace();
         }
     }
 
