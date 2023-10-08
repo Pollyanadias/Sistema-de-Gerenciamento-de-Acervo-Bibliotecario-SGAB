@@ -245,43 +245,109 @@ public class Usuario {
         }
     }
 
-    public String getCpf() {
-        return cpf;
+    /**
+     * Método listaUsuario: Método que acessa o banco de dados e retorna um
+     * ArrayList de Usuario.
+     * 
+     * @return ArrayList<Usuario>
+     */
+    public static ArrayList<Usuario> listaUsuario() {
+        Connection connection = PostgreSQLConnection.getInstance().getConnection();
+        PreparedStatement state = null;
+        ResultSet result, result2;
+
+        // ArrayList do tipo Usuario, que será retornado com todos os usuarios do banco.
+        ArrayList<Usuario> usuarios = new ArrayList<Usuario>();
+
+        try {
+
+            // Seleciona todos os usuarios.
+            String query = "SELECT * From Usuario";
+            state = connection.prepareStatement(query);
+            result = state.executeQuery();
+
+            while (result.next()) {
+
+                // Seleciona os telefones desses usuarios.
+                result2 = buscaTelefone(result.getString(1));
+                ArrayList<String> telefone = new ArrayList<String>();
+                while (result2.next()) {
+                    telefone.add(result2.getString(2));
+                }
+
+                // Cria um objeto para cada um e coloca no ArrayList.
+                Usuario user = new Usuario(result.getString(1), result.getString(2), result.getString(3), result.getString(4), telefone);
+                usuarios.add(user);
+            }
+
+            state.close();
+            return usuarios;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
+
+    /*
+     * A partir daqui temos declarações de seters e geters. os Seters vão funcionar
+     * pra formatar os dados,
+     * para que erros não ocorram no momento de mexer com o Banco de Dados. Os
+     * Geters estão como auxiliares,
+     * sendo usados por métodos internos e externos (da Classe Herdeira).
+     */
 
     public void setCpf(String cpf) {
-        this.cpf = cpf;
-    }
-
-    public String getNome() {
-        return nome;
+        if (cpf != null)
+            this.cpf = cpf;
+        else
+            System.out.println("O valor de cpf não pode ser null");
     }
 
     public void setNome(String nome) {
-        this.nome = nome;
+        if (nome != null)
+            this.nome = nome;
+        else
+            System.out.println("O valor de nome não pode ser null");
     }
 
-    public String getSenha() {
-        return senha;
+    public void setEmail(String email) {
+        if (email != null)
+            this.email = email;
+        else
+            System.out.println("O valor de email não pode ser null");
     }
 
     public void setSenha(String senha) {
-        this.senha = senha;
+        if (senha != null)
+            this.senha = senha;
+        else
+            System.out.println("O valor de senha não pode ser null");
     }
+
     public void setTelefone(ArrayList<String> telefone) {
         if (telefone != null)
             this.telefone = telefone;
         else
             System.out.println("O valor de telefone não pode ser null");
     }
+
+    public String getCpf() {
+        return cpf;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public String getSenha() {
+        return senha;
+    }
+
     public String getEmail() {
         return email;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
-    
     public ArrayList<String> getTelefone() {
         return telefone;
     }
@@ -291,4 +357,5 @@ public class Usuario {
         return "Usuario [cpf=" + cpf + ", nome=" + nome + ", senha=" + senha + ", email=" + email + ", telefone="
                 + telefone + "]";
     }
+
 }
