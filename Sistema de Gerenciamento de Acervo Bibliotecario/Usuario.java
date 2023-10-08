@@ -109,7 +109,7 @@ public class Usuario {
             }
 
             // Retorna o usuário
-            return new Usuario(result.getString(1), result.getString(2), result.getString(3), result.getString(4), telefone);
+            return new Usuario(result.getString(1), result.getString(2), result.getString(3), result.getString(4));
 
         } catch (Exception e) {
             System.out.println(e);
