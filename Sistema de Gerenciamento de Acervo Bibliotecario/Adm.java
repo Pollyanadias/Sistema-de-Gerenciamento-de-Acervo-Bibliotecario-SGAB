@@ -59,22 +59,29 @@ import java.util.ArrayList;
 
     }
 
+public static Adm buscaAdm(String cpf) {
+        Connection connection = PostgreSQLConnection.getInstance().getConnection();
+        PreparedStatement state = null;
+        ResultSet result = null;
 
-    public static Adm BuscarAdm(int id){
-        Adm adm = null;
-        try(Connection connection = PostgreSQLConnection.getInstance().getConnection()) {
-        String query = "SELECT * FROM Adm where id = ?";
-        PreparedStatement state = connection.prepareStatement(query);
-        state.setInt(1, id);
-        ResultSet result = state.executeQuery();  
-        while (result.next()) {
-            return new Adm(result.getInt(1), Usuario.buscaUsuario(result.getString(2)));
-        }
+        try {
+            // Busca por pelo cpf
+            String query = "SELECT idAdm from Adm where cpf = ?";
+            state = connection.prepareStatement(query);
+            state.setString(1, cpf);
+            result = state.executeQuery();
+
+            if (result.next()) {
+                return new Adm(result.getInt(1), Usuario.buscaUsuario(cpf));
+            }
+            state.close();
+
         } catch (Exception e) {
-            System.out.println(e);
+            e.printStackTrace();
         }
-        return adm;
+        return null;
     }
+   
    
     public static void ExcluirAdm(String cpf){
         try(Connection connection = PostgreSQLConnection.getInstance().getConnection() ) {
