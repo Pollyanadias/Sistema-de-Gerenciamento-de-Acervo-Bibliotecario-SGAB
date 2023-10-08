@@ -117,20 +117,28 @@ public class Usuario {
         return null;
     }
 
-    public static Usuario confirmaCredencial(String email, String senha ){
-        try (Connection connection = PostgreSQLConnection.getInstance().getConnection()){
+    public static Usuario loginUsuario(String email, String senha) {
+        Connection connection = PostgreSQLConnection.getInstance().getConnection();
+        PreparedStatement state = null;
+        ResultSet result = null;
+
+        try {
+
+            // Remove o usuário da tabela Usuario
             String query = "SELECT cpf From usuario where email = ? AND senha = ?";
-            PreparedStatement state = connection.prepareStatement(query);
+            state = connection.prepareStatement(query);
             state.setString(1, email);
             state.setString(2, senha);
-            ResultSet result = state.executeQuery();
-            return buscaUsuario(result.getString(1));
+            result = state.executeQuery();
+
+            if(result.next()){
+                return buscaUsuario(result.getString(1));
+            }    
         } catch (Exception e) {
-            System.out.println (e);
+            e.printStackTrace();
         }
 
         return null;
-
     }
      /**
      * buscaTelefone é um método auxiliar. Busca um telefone no banco com base no
