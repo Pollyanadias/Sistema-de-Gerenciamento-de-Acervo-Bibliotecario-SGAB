@@ -232,7 +232,12 @@ public class Usuario {
     public void setSenha(String senha) {
         this.senha = senha;
     }
-
+    public void setTelefone(ArrayList<String> telefone) {
+        if (telefone != null)
+            this.telefone = telefone;
+        else
+            System.out.println("O valor de telefone não pode ser null");
+    }
     public String getEmail() {
         return email;
     }
@@ -241,8 +246,8 @@ public class Usuario {
         this.email = email;
     }
     
-    public void setTelefone(ArrayList<String> telefone) {
-        this.telefone = telefone;
+    public ArrayList<String> getTelefone() {
+        return telefone;
     }
 
     @Override
