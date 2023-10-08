@@ -134,9 +134,9 @@ public class Livro {
     
         try {
             // Seleciona tudo (*) na tabela Livro onde o título é igual ao recebido
-            String query = "SELECT * FROM Livro WHERE titulo = ?"; //cria a query, que é a pesquisa que iremos fazer
+            String query = "SELECT * FROM Livro WHERE titulo LIKE ?"; //cria a query, que é a pesquisa que iremos fazer
             state = connection.prepareStatement(query); 
-            state.setString(1, titulo);
+            state.setString(1, "%"+titulo+"%");
             result = state.executeQuery();
             
             while (result.next()) {
@@ -177,41 +177,110 @@ public class Livro {
         }
     
         return livrosEncontrados;
-    }   
-
-    public static Livro BuscaLivroGenero(String busca) {
-        try (Connection connection = PostgreSQLConnection.getInstance().getConnection()) {
-            String query = "Select * from livro where genero like ? "; // Busca no banco de dados, neste caso, já que o ? é substituido por
-            PreparedStatement state = connection.prepareStatement(query); // 'algo', usamos a varivavel diretamente para a pesquisa ficar correta
-            state.setString(1, "%" + busca + "%");
-            ResultSet result = state.executeQuery();// Resultados da execução da query.
-            
-            // Enquanto houverem linhas de resultados da busca para serem impressas, retorna-os.
-            while (result.next()) {  
-                return new Livro(result.getInt(1), result.getString(2), result.getString(3), result.getString(4), result.getDate(5), result.getString(6), result.getString(7), result.getString(8), result.getInt(9), result.getInt(10));
-            }
-            
-        } catch (Exception e) {
-            System.out.println(e);
-        }
-        return null;
     }
-  
-    public static Livro BuscaLivroAutor(String busca) {
-        try (Connection connection = PostgreSQLConnection.getInstance().getConnection()) {
-
-            String query = "Select * from livro where autor like ? "; // Busca no banco de dados, neste caso, já que o ? é substituido por
-            PreparedStatement state = connection.prepareStatement(query); // 'algo', usamos a varivavel diretamente para a pesquisa ficar correta
-            state.setString(1, "%" + busca + "%");
-            ResultSet result = state.executeQuery();// Resultados da execução da query.
-            // Enquanto houverem linhas de resultados da busca para serem impressas, retorna-os.
-            while (result.next()) {  
-                return new Livro(result.getInt(1), result.getString(2), result.getString(3), result.getString(4), result.getDate(5), result.getString(6), result.getString(7), result.getString(8), result.getInt(9), result.getInt(10));
+    
+   public static List<Livro> BuscaLivroGenero(String genero) {
+        Connection connection = PostgreSQLConnection.getInstance().getConnection(); 
+        PreparedStatement state = null; //cria o state, aquele que executa a pesquisa
+        ResultSet result = null;
+        List<Livro> livrosEncontrados = new ArrayList<>();
+    
+        try {
+            String query = "SELECT * FROM Livro WHERE genero LIKE ?"; //cria a query, que é a pesquisa que iremos fazer
+            state = connection.prepareStatement(query); 
+            state.setString(1, "%"+genero+"%");
+            result = state.executeQuery();
+            
+            while (result.next()) {
+                // Para cada registro encontrado, cria um objeto Livro e adiciona na lista
+                Livro livro = new Livro(
+                    result.getInt("idLivro"),
+                    result.getString("Titulo"),
+                    result.getString("Genero"), 
+                    result.getString("Autor"),
+                    result.getString("DataPublicacao"),
+                    result.getString("Edicao"),
+                    result.getString("Editora"),
+                    result.getString("ISBN"),
+                    result.getInt("quantLivros"),
+                    result.getInt("quantDisponivel")
+                );
+    
+                livrosEncontrados.add(livro);
             }
         } catch (Exception e) {
-            System.out.println(e);
+            e.printStackTrace();
+        } finally {
+            //fechar o result e o result2
+            if (result != null) {
+                try {
+                    result.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (state != null) {
+                try {
+                    state.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
         }
-        return null;
+    
+        return livrosEncontrados;
+    }
+
+    public static List<Livro> BuscaLivroAutor(String autor) {
+        Connection connection = PostgreSQLConnection.getInstance().getConnection(); 
+        PreparedStatement state = null; //cria o state, aquele que executa a pesquisa
+        ResultSet result = null;
+        List<Livro> livrosEncontrados = new ArrayList<>();
+    
+        try {
+            String query = "SELECT * FROM Livro WHERE autor LIKE ?"; //cria a query, que é a pesquisa que iremos fazer
+            state = connection.prepareStatement(query); 
+            state.setString(1, "%"+autor+"%");
+            result = state.executeQuery();
+            
+            while (result.next()) {
+                // Para cada registro encontrado, cria um objeto Livro e adiciona na lista
+                Livro livro = new Livro(
+                    result.getInt("idLivro"),
+                    result.getString("Titulo"),
+                    result.getString("Genero"), 
+                    result.getString("Autor"),
+                    result.getString("DataPublicacao"),
+                    result.getString("Edicao"),
+                    result.getString("Editora"),
+                    result.getString("ISBN"),
+                    result.getInt("quantLivros"),
+                    result.getInt("quantDisponivel")
+                );
+    
+                livrosEncontrados.add(livro);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            //fechar o result e o result2
+            if (result != null) {
+                try {
+                    result.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (state != null) {
+                try {
+                    state.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    
+        return livrosEncontrados;
     }
 
     public void inserirLivro() {
