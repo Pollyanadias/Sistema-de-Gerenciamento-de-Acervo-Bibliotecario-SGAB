@@ -82,21 +82,26 @@ public static Adm buscaAdm(String cpf) {
         return null;
     }
    
-   
-    public static void ExcluirAdm(String cpf){
-        try(Connection connection = PostgreSQLConnection.getInstance().getConnection() ) {
-        String query = "DELETE * FROM Adm WHERE cpf = ?"; //Vai deletar todos os dados do ADM que possue o CPF correpondente à o requisitado
-        PreparedStatement state = connection.prepareStatement(query);
-        state.setString(1, cpf); //substituindo o ? da String query, o 1 é a posição e o valor cpf é ?
-        state.executeUpdate();
-        Usuario.excluirConta(cpf); 
-        } catch (Exception e) {
-            e.printStackTrace(); //mostrar o erro onde ele está
-        }
-     }
+    public static void excluirAdm(String cpf) {
+        Connection connection = PostgreSQLConnection.getInstance().getConnection();
+        PreparedStatement state = null;
 
-    public void editarAdm(String cpf, String nome, String senha, String email, String telefone1, String telefone2, String telefone3 ){
-        try (Connection connection = PostgreSQLConnection.getInstance().getConnection()){
+        try {
+            String query = "Delete From Adm where cpf = ?";
+            state = connection.prepareStatement(query);
+            state.setString(1, cpf);
+            state.executeUpdate();
+            state.close();
+            Usuario.excluirConta(cpf);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+   
+public void editarAdm(String cpf, String nome, String senha, String email, String telefone1, String telefone2,
+            String telefone3) {
+        try (Connection connection = PostgreSQLConnection.getInstance().getConnection()) {
             String query = "UPDATE Adm SET nome = ?, senha = ?, email = ? WHERE cpf = ?";
             PreparedStatement state = connection.prepareStatement(query);
             state.setString(1, nome);
@@ -105,15 +110,16 @@ public static Adm buscaAdm(String cpf) {
             state.setString(4, cpf);
             int linhasAfetadas = state.executeUpdate();
 
-            if(linhasAfetadas > 0){
-                System.out.println ("Os dados do Adm foram atualizados com sucesso!");
-            }else{
-                System.out.println ("Não foi possivel encontrar um Adm para atualizar!");
+            if (linhasAfetadas > 0) {
+                System.out.println("Os dados do Adm foram atualizados com sucesso!");
+            } else {
+                System.out.println("Não foi possivel encontrar um Adm para atualizar!");
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
 
     @Override
     public String toString() {
