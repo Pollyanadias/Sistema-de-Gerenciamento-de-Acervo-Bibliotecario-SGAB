@@ -24,19 +24,41 @@ import java.util.ArrayList;
         this.idAdm = idAdm;
     }
 
-    public void InserirAdm(String cpf){    
-        try(Connection connection = PostgreSQLConnection.getInstance().getConnection()){
-        String query = "INSERT INTO Adm (cpf) VALUES (?)"; //inserir o cpf dentro da tabela cpf
-        PreparedStatement state = connection.prepareStatement(query);
-        state.setString(1, cpf);
-        state.executeUpdate();  
+    public void criarAdm() {
+        Connection connection = PostgreSQLConnection.getInstance().getConnection();
+        PreparedStatement state = null;
+
+        if (buscaUsuario(getCpf()) == null && buscaAdm(getCpf()) == null) {
+            try {
+                super.criarConta();
+                String query = "INSERT INTO Adm (cpf) VALUES (?)";
+                state = connection.prepareStatement(query);
+                state.setString(1, super.getCpf());
+                state.executeUpdate();
+                state.close();
+                System.out.println("Adm Criado!");
+            } catch (Exception e) {
+                System.out.println(e);
+
+            }
+        } else if (buscaUsuario(getCpf()) == null) {
+            try {
+                String query = "INSERT INTO Adm (cpf) VALUES (?)";
+                state = connection.prepareStatement(query);
+                state.setString(1, super.getCpf());
+                state.executeUpdate();
+                state.close();
+                System.out.println("Adm Criado!");
+            } catch (Exception e) {
+                System.out.println(e);
+
+            }
+        } else {
+            System.out.println("Adm já cadastrado!");
+        }
 
     }
-    catch(Exception e){
-        System.out.println(e);
-    
-        }
-     }
+
 
     public static Adm BuscarAdm(int id){
         Adm adm = null;
