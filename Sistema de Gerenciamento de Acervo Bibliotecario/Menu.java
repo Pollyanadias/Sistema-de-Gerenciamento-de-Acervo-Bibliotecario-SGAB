@@ -10,7 +10,7 @@ public class Menu {
         int op;
 
         while (!sair) {
-            // opções do MainProjeto Testes
+            // opções do Menu
             op = MenuPrincipal(sc);
             sc.nextLine();
             switch (op) {
